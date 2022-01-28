@@ -126,6 +126,7 @@ def save_and_display_gradcam(img_path, heatmap, cam_path="cam.jpg", alpha=0.4):
     superimposed_img.save(cam_path)
 
     # Display 
+    st.write('GRAD-CAM:')
     st.image(cam_path)
     # Excluí a imagem do caminho salvo
     os.remove(cam_path)
@@ -247,7 +248,6 @@ if __name__ == "__main__":
         pred = model.predict(img)
         classes = ['cat','dog']
         heatmap = make_gradcam_heatmap(img, model, 'top_conv', pred_index=np.argmax(pred))
-        st.write('GRAD-CAM:')
         save_and_display_gradcam('sample.jpg', heatmap)
         st.write(f"Predição: {classes[np.argmax(pred)]}")
     
