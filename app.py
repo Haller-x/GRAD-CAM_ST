@@ -25,7 +25,7 @@ def load_and_save(img_bytes):
 
 @st.cache(allow_output_mutation=True)
 def load_h5():
-    model = load_model('model.h5')
+    model = tf.keras.models.load_model('model.h5')
     model._make_predict_function()
     model.summary()  # included to make it visible when model is reloaded
     return model
