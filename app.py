@@ -24,7 +24,7 @@ def load_and_save(img_bytes):
     img.save("sample.jpg")
 
 @st.cache(allow_output_mutation=True)
-def load_model():
+def load_h5():
     model = load_model('model.h5')
     model._make_predict_function()
     model.summary()  # included to make it visible when model is reloaded
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     #lógica para carregar o modelo e footer
     st.markdown(hide_footer_style, unsafe_allow_html=True)
     footer()
-    model = load_model()
+    model = load_h5()
     uploaded_file = st.file_uploader(label="Faça o upload de imagem para gerar a classificação ",
                                     type=["png", "jpeg", "jpg"])
 
