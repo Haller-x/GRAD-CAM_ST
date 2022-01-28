@@ -12,6 +12,18 @@ from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, class
 from htbuilder.units import percent, px
 from htbuilder.funcs import rgba, rgb
 
+@st.cache(allow_output_mutation=True)
+def load_h5():
+    """
+    Carrega o modelo em .h5 e armazena em cache
+    NO ARGS
+    RETURN:
+    modelo preditivo
+    """
+    model = tf.keras.models.load_model('model.h5')
+    model.make_predict_function()
+    model.summary()  # included to make it visible when model is reloaded
+    return model
 
 def load_and_save(img_bytes):
     '''
@@ -22,13 +34,6 @@ def load_and_save(img_bytes):
     img = Image.open(io.BytesIO(img_bytes))
     img = img.convert('RGB')
     img.save("sample.jpg")
-
-@st.cache(allow_output_mutation=True)
-def load_h5():
-    model = tf.keras.models.load_model('model.h5')
-    model.make_predict_function()
-    model.summary()  # included to make it visible when model is reloaded
-    return model
 
 def get_img_array(img_path, size):
     '''
@@ -247,8 +252,8 @@ if __name__ == "__main__":
         img = get_img_array('sample.jpg',size=(300,300))
         with st.spinner('Calculando resultados...'):
             pred = model.predict(img)
-            classes = ['cat','dog']
+            classes = ['cat (gato)','dog (cachorro)']
             heatmap = make_gradcam_heatmap(img, model, 'top_conv', pred_index=np.argmax(pred))
         save_and_display_gradcam('sample.jpg', heatmap)
-        st.write(f"Predição: {classes[np.argmax(pred)]}")
+        st.write(f"Predição: {classes[np.argmax(pred)]}, Probabilidade {max(pred[0])}")
     
