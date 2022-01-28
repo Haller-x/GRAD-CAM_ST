@@ -12,7 +12,6 @@ from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, class
 from htbuilder.units import percent, px
 from htbuilder.funcs import rgba, rgb
 
-model = None
 
 def load_and_save(img_bytes):
     '''
@@ -24,12 +23,12 @@ def load_and_save(img_bytes):
     img = img.convert('RGB')
     img.save("sample.jpg")
 
+@st.cache(allow_output_mutation=True)
 def load_model():
-    '''
-    Carrega o modelo segundo as boas práticas do keras em aplicações web
-    '''
-    global model
-    model = tf.keras.models.load_model('model.h5')
+    model = load_model('model.h5')
+    model._make_predict_function()
+    model.summary()  # included to make it visible when model is reloaded
+    return model
 
 def get_img_array(img_path, size):
     '''
@@ -228,7 +227,7 @@ if __name__ == "__main__":
     #lógica para carregar o modelo e footer
     st.markdown(hide_footer_style, unsafe_allow_html=True)
     footer()
-    load_model()
+    model = load_model()
     uploaded_file = st.file_uploader(label="Faça o upload de imagem para gerar a classificação ",
                                     type=["png", "jpeg", "jpg"])
 
