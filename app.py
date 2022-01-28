@@ -245,9 +245,10 @@ if __name__ == "__main__":
         img = tf.expand_dims(load_image(image_as_bytes), 0)
         load_and_save(image_as_bytes)
         img = get_img_array('sample.jpg',size=(300,300))
-        pred = model.predict(img)
-        classes = ['cat','dog']
-        heatmap = make_gradcam_heatmap(img, model, 'top_conv', pred_index=np.argmax(pred))
+        with st.spinner('Calculando resultados...'):
+            pred = model.predict(img)
+            classes = ['cat','dog']
+            heatmap = make_gradcam_heatmap(img, model, 'top_conv', pred_index=np.argmax(pred))
         save_and_display_gradcam('sample.jpg', heatmap)
         st.write(f"Predição: {classes[np.argmax(pred)]}")
     
